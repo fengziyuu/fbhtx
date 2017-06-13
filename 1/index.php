@@ -148,7 +148,7 @@ switch($MsgType){
                     <Label><![CDATA[%s]]></Label>
                     <MsgId>%s</MsgId>
                 </xml>";
-			$results=sprintf($replyXmls,$FromUserName,$ToUserName,time(),$Location_X,$Location_Y,$Scal,$Label,$MsgId);
+			$results=sprintf($replyXmls,$FromUserName,$ToUserName,time(),$Location_X,$Location_Y,$Scale,$Label,$MsgId);
 	break;
 
 	//接收链接消息和被动回复链接
