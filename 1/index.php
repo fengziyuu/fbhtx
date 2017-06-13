@@ -129,7 +129,6 @@ switch($MsgType){
 	case "location":
 	//获取用户发送的地理位置(当做回复消息)
 	$replyMsg=$obj->MediaId;
-        var_dump($obj);
 	//封装回复的xml
 	$replyXml="<xml>
                     <ToUserName><![CDATA[%s]]></ToUserName>
