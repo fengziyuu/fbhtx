@@ -132,14 +132,16 @@ switch($MsgType){
         var_dump($obj);
 	//封装回复的xml
 	$replyXml="<xml>
-					<ToUserName><![CDATA[%s]]></ToUserName>
-					<FromUserName><![CDATA[%s]]></FromUserName>
-					<CreateTime>%s</CreateTime>
-					<MsgType><![CDATA[location]]></MsgType>
-					<location>
-					<MediaId><![CDATA[%s]]></MediaId>
-					</location>
-				</xml>";
+                    <ToUserName><![CDATA[%s]]></ToUserName>
+                    <FromUserName><![CDATA[%s]]></FromUserName>
+                    <CreateTime>%s</CreateTime>
+                    <MsgType><![CDATA[location]]></MsgType>
+                    <Location_X>23.134521</Location_X>
+                    <Location_Y>113.358803</Location_Y>
+                    <Scale>20</Scale>
+                    <Label><![CDATA[位置信息]]></Label>
+                    <MsgId>1234567890123456</MsgId>
+                </xml>
 
 	break;
 
