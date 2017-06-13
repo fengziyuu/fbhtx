@@ -35,8 +35,6 @@ if(signature()){
 //微信公众平台接收普通用户发送的消息（XML） (post)  1    1
 $postData=$HTTP_RAW_POST_DATA;
 //判断
-$obj=simplexml_load_string($postData,"SimpleXMLElement",LIBXML_NOCDATA);
-var_dump($obj);
 if(!$postData){
 	echo "error";
 	exit();
