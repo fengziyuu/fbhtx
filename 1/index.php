@@ -125,6 +125,79 @@ switch($MsgType){
 
 	break;
 
+	//接收地理位置消息和被动回复地理位置
+	case "location":
+	//获取用户发送的地理位置(当做回复消息)
+	$replyMsg=$obj->MediaId;
+	//封装回复的xml
+	$replyXml="<xml>
+					<ToUserName><![CDATA[%s]]></ToUserName>
+					<FromUserName><![CDATA[%s]]></FromUserName>
+					<CreateTime>%s</CreateTime>
+					<MsgType><![CDATA[location]]></MsgType>
+					<Voice>
+					<MediaId><![CDATA[%s]]></MediaId>
+					</Voice>
+				</xml>";
+
+	break;
+
+	//接收链接消息和被动回复链接
+	case "link":
+	//获取用户发送的链接(当做回复消息)
+	$replyMsg=$obj->MediaId;
+	//封装回复的xml
+	$replyXml="<xml>
+					<ToUserName><![CDATA[%s]]></ToUserName>
+					<FromUserName><![CDATA[%s]]></FromUserName>
+					<CreateTime>%s</CreateTime>
+					<MsgType><![CDATA[link]]></MsgType>
+					<Voice>
+					<MediaId><![CDATA[%s]]></MediaId>
+					</Voice>
+				</xml>";
+
+	break;
+
+
+	//接收小视频消息和被动回复小视频
+	case "shortvideo":
+	//获取用户发送的视频(当做回复消息)
+	$replyMsg=$obj->MediaId;
+	//封装回复的xml
+	$replyXml="<xml>
+					<ToUserName><![CDATA[%s]]></ToUserName>
+					<FromUserName><![CDATA[%s]]></FromUserName>
+					<CreateTime>%s</CreateTime>
+					<MsgType><![CDATA[shortvideo]]></MsgType>
+					<Voice>
+					<MediaId><![CDATA[%s]]></MediaId>
+					</Voice>
+				</xml>";
+
+	break;
+
+	//接收视频消息和被动回复视频
+	case "video":
+	//获取用户发送的视屏(当做回复消息)
+	$replyMsg=$obj->MediaId;
+	//封装回复的xml
+	$replyXml="<xml>
+					<ToUserName><![CDATA[%s]]></ToUserName>
+					<FromUserName><![CDATA[%s]]></FromUserName>
+					<CreateTime>%s</CreateTime>
+					<MsgType><![CDATA[video]]></MsgType>
+					<Voice>
+					<MediaId><![CDATA[%s]]></MediaId>
+					</Voice>
+				</xml>";
+
+	break;
+
+
+
+
+
 	//事件推送 关注 
 	case 'event':
 	$Event=$obj->Event;
