@@ -101,9 +101,7 @@ switch($MsgType){
 					<FromUserName><![CDATA[%s]]></FromUserName>
 					<CreateTime>%s</CreateTime>
 					<MsgType><![CDATA[image]]></MsgType>
-					<Image>
-					<MediaId><![CDATA[./1.jpg]]></MediaId>
-					</Image>
+					<PicUrl><![CDATA[124.gif]]></PicUrl>
 				</xml>";
 
 	break;
