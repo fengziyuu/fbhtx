@@ -140,7 +140,7 @@ switch($MsgType){
                     <Scale>20</Scale>
                     <Label><![CDATA[位置信息]]></Label>
                     <MsgId>1234567890123456</MsgId>
-                </xml>
+                </xml>";
 
 	break;
 
