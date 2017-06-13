@@ -102,7 +102,7 @@ switch($MsgType){
 					<CreateTime>%s</CreateTime>
 					<MsgType><![CDATA[image]]></MsgType>
 					<Image>
-					<MediaId><![CDATA[./1.jpg]]></MediaId>
+					<MediaId><![CDATA[%s]]></MediaId>
 					</Image>
 				</xml>";
 
