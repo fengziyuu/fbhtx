@@ -19,9 +19,9 @@ $obj=simplexml_load_string($str,"SimpleXMLElement",LIBXML_NOCDATA);
 var_dump($obj);
 // 	echo $obj->ToUserName;
 
-$format="there are %d monkeys in the %s";
-$num=3;
-$l='tree';
+//$format="there are %d monkeys in the %s";
+//$num=3;
+//$l='tree';
 //把%符号替换为一个作为参数传递变量
 echo sprintf($format,$num,$l);
  ?>
