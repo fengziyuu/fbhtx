@@ -1,6 +1,6 @@
 <?php
 //$str 微信公众平台服务器接收到的xml数据包 
-// $str="<xml>
+$str="<xml>
             <ToUserName><![CDATA[toUser]]></ToUserName>
             <FromUserName><![CDATA[fromUser]]></FromUserName>
             <CreateTime>1351776360</CreateTime>
