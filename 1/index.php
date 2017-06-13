@@ -129,19 +129,26 @@ switch($MsgType){
 	case "location":
 	//获取用户发送的地理位置(当做回复消息)
 	$replyMsg=$obj->MediaId;
+        $Location_X=$obj->Location_X;
+        $Location_Y=$obj->Location_Y;
+        $Scale=$obj->Scale;
+        $Label=$obj->Label;
+        $MsgId=$obj->MsgId;
+        
+        
 	//封装回复的xml
-	$replyXml="<xml>
+	$replyXmls="<xml>
                     <ToUserName><![CDATA[%s]]></ToUserName>
                     <FromUserName><![CDATA[%s]]></FromUserName>
                     <CreateTime>%s</CreateTime>
                     <MsgType><![CDATA[location]]></MsgType>
-                    <Location_X>23.134521</Location_X>
-                    <Location_Y>113.358803</Location_Y>
-                    <Scale>20</Scale>
-                    <Label><![CDATA[位置信息]]></Label>
-                    <MsgId>1234567890123456</MsgId>
+                    <Location_X>%s</Location_X>
+                    <Location_Y>%s</Location_Y>
+                    <Scale>%s</Scale>
+                    <Label><![CDATA[%s]]></Label>
+                    <MsgId>%s</MsgId>
                 </xml>";
-
+			$results=sprintf($replyXmls,$FromUserName,$ToUserName,time(),$Location_X,$Location_Y,$Scal,$Label,$MsgId);
 	break;
 
 	//接收链接消息和被动回复链接
