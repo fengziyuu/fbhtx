@@ -170,9 +170,9 @@ switch($MsgType){
 					<FromUserName><![CDATA[%s]]></FromUserName>
 					<CreateTime>%s</CreateTime>
 					<MsgType><![CDATA[shortvideo]]></MsgType>
-					<Voice>
+					<video>
 					<MediaId><![CDATA[%s]]></MediaId>
-					</Voice>
+					</video>
 				</xml>";
 
 	break;
