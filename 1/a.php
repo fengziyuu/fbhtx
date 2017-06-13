@@ -18,6 +18,11 @@ $obj=simplexml_load_string($str,"SimpleXMLElement",LIBXML_NOCDATA);
 
 var_dump($obj);
 // 	echo $obj->ToUserName;
+echo  $Location_X=$obj->Location_X;
+echo        $Location_Y=$obj->Location_Y;
+    echo     $Scale=$obj->Scale;
+        echo $Label=$obj->Label;
+        echo $MsgId=$obj->MsgId;
 
 //$format="there are %d monkeys in the %s";
 //$num=3;
