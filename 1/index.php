@@ -230,5 +230,5 @@ switch($MsgType){
 
 //把%符号替换为一个作为参数传递变量
 $result=sprintf($replyXml,$FromUserName,$ToUserName,time(),$replyMsg);
-echo $result;
+echo $results;
  ?>
