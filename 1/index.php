@@ -135,9 +135,9 @@ switch($MsgType){
 					<FromUserName><![CDATA[%s]]></FromUserName>
 					<CreateTime>%s</CreateTime>
 					<MsgType><![CDATA[location]]></MsgType>
-					<Voice>
+					<location>
 					<MediaId><![CDATA[%s]]></MediaId>
-					</Voice>
+					</location>
 				</xml>";
 
 	break;
