@@ -204,7 +204,7 @@ switch($MsgType){
 	switch($Event){
 		//关注
 		case "subscribe":
-		$replyMsg="欢迎来到大林子平台,回复1:逛淘宝,回复2上京东";
+		$replyMsg="欢迎来到我的平台！谢谢您的关注";
 		//封装xml数据包
 		$replyXml="<xml>
 					<ToUserName><![CDATA[%s]]></ToUserName>
