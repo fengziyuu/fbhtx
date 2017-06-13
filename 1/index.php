@@ -86,7 +86,7 @@ switch($MsgType){
 					<FromUserName><![CDATA[%s]]></FromUserName>
 					<CreateTime>%s</CreateTime>
 					<MsgType><![CDATA[text]]></MsgType>
-					<Content><![CDATA[wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww]]></Content>
+					<Content><![CDATA[我就回复这句话]]></Content>
 				</xml>";
 
 	break;
