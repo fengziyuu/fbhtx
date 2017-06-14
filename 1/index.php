@@ -113,8 +113,17 @@ function receiveEvent($obj)
 	$event = $obj->Event;
 	switch($event){
 		case 'subscribe':
-		$replyMsg = "欢迎来到我的平台,回复1:可以逛淘宝,回复2:可以上京东";
-		replyText($obj,$replyMsg);
+		$replyMsg = "欢迎来到我的平台,回复1:可以逛淘宝,回复2:可以上京东;";
+		//replyText($obj,$replyMsg);
+      	$replyXml="<xml>
+					<ToUserName><![CDATA[%s]]></ToUserName>
+					<FromUserName><![CDATA[%s]]></FromUserName>
+					<CreateTime>%s</CreateTime>
+					<MsgType><![CDATA[text]]></MsgType>
+					<Content><![CDATA[%s]]></Content>
+				</xml>";
+        $resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$replyMsg);
+		echo $resultstr;
 		break;
 	}
 }
@@ -223,22 +232,33 @@ function replyText($obj,$content)
 					<MsgType><![CDATA[text]]></MsgType>
 					<Content><![CDATA[%s]]></Content>
 				</xml>";
-				$content = curl();
+				$content = curls();
 		}
 	$resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$content);
 	echo $resultstr;
 }
 
 
-function curl()
+function curls()
 {
-	header('Content-type:text/html;charset=utf-8');
-	$ch = curl_init();
-	$url="http://www.kuitao8.com/api/joke";
-	curl_setopt($ch,CURLOPT_URL,$url);
-	curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-	$opt = curl_exec($ch);
-	curl_close($ch);
-	$s = json_decode($opt,true);
-	return htmlspecialchars($s['content']);
+	header("Content-type:text/html;charset=utf-8");
+    //curl 模拟get请求1 截取部分数据 以数据流的形式显示出 而不是整个页面
+    //1.初始化
+    $ch=curl_init();
+    //笑话接口
+    $url="http://www.kuitao8.com/api/joke";
+    //2.设置变量
+    curl_setopt($ch,CURLOPT_URL,$url);
+    //把数据以数据流的形式显示出
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+    //3.执行
+    $output=curl_exec($ch);
+    //4.关闭curl
+    curl_close($ch);
+
+    // echo $output;
+    //json_decode()
+    $s=json_decode($output,true);
+    // var_dump($s);
+    return htmlspecialchars($s['content']);
 }
