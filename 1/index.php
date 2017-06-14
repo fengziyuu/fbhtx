@@ -223,7 +223,7 @@ function replyText($obj,$content)
 					<MsgType><![CDATA[text]]></MsgType>
 					<Content><![CDATA[%s]]></Content>
 				</xml>";
-				$content = curl();
+				$content = ($content == $replyMsg) ? $replyMsg : curl();
 		}
 	$resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$content);
 	echo $resultstr;
