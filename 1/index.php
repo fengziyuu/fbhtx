@@ -36,7 +36,7 @@
 
 	//把接收到的xml数据包转换为对象  SimpleXMLElement 是新对象的类  LIBXML_NOCDATA  这是文本节点 CDATA标签里 XML文本不进行解析
 	$obj = simplexml_load_string($postData,'SimpleXMLElement',LIBXML_NOCDATA);
-	$FromUserName = $obj->FormUserName;//获取发送方
+	$FromUserName = $obj->FromUserName;//获取发送方
 	$ToUserName = $obj->ToUserName;//获取接受方
 	$MsgType = $obj->MsgType;//获取用户发送的消息类型
 
