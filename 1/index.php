@@ -223,14 +223,14 @@ function replyText($obj,$content)
 					<MsgType><![CDATA[text]]></MsgType>
 					<Content><![CDATA[%s]]></Content>
 				</xml>";
-				$content = curl();
+				$content = curls();
 		}
 	$resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$content);
 	echo $resultstr;
 }
 
 
-function curl()
+function curls()
 {
 	header('Content-type:text/html;charset=utf-8');
 	$ch = curl_init();
