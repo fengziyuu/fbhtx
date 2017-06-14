@@ -45,7 +45,7 @@ function responseMsg()
 		echo 'error';
 		exit;
 	}
-	$obj = simplexml_load_string($postData,'SimpleXMLElement',LIMXML_NOCDATA);
+	$obj = simplexml_load_string($postData,'SimpleXMLElement',LIBXML_NOCDATA);
 	$FromUserName = $obj->FromUserName;
 	$ToUserName = $obj->ToUserName;
 	$MsgType = $obj->MsgType;
