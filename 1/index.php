@@ -260,5 +260,6 @@ function curls()
     //json_decode()
     $s=json_decode($output,true);
     // var_dump($s);
-    echo $s['content'];
+    echo htmlspecialchars($s['content']);
+}
 }
