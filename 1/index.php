@@ -7,9 +7,9 @@
 		$nonce = $_GET['nonce'];
 
 		//把token timestamp nonce 存储在数组里
-		$stmStr = array($nonce,$timestamp,TOKEN);
-		sort($stmStr,SORT_STRING);
-		$stmStr = implode($stmStr);
+		$stmArr = array($nonce,$timestamp,TOKEN);
+		sort($stmArr,SORT_STRING);
+		$stmStr = implode($stmArr);
 		$stmStr = sha1($stmStr);
 		if($stmStr == $signature)
 			return true;
