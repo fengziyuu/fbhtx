@@ -91,7 +91,7 @@ function receiveLocation($obj)
 {
 	$locationArr = array(
 		'Location_Y'=>"您所在的位置的经度".$obj->Location_Y,
-		'Location_X'=>"您所在的位置的纬度".$obj->Location_X,
+		'Location_X'=>"纬度".$obj->Location_X,
 		'Label'=>$obj->Label
 		);
     $str = implode($locationArr);
