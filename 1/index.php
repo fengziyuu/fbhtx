@@ -240,5 +240,5 @@ function curl()
 	$opt = curl_exec($ch);
 	curl_close($ch);
 	$s = json_decode($opt,true);
-	return $s['content'];
+	return htmlspecialchars($s['content']);
 }
