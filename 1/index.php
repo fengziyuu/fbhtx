@@ -42,6 +42,22 @@
 
 	switch($MsgType)
 	{
+		case 'image':
+			//获取用户发送过来的图片消息(当做回复消息)
+			$replyMsg=$obj->MediaId;
+			//把回复的消息封装在xml数据包里
+			$replyXml="<xml>
+							<ToUserName><![CDATA[%s]]></ToUserName>
+							<FromUserName><![CDATA[%s]]></FromUserName>
+							<CreateTime>%s</CreateTime>
+							<MsgType><![CDATA[image]]></MsgType>
+							<Image>
+							<MediaId><![CDATA[%s]]></MediaId>
+							</Image>
+						</xml>";
+
+		break;
+			
 		case 'event':
 			$Event = $obj->Event;
 			switch($Event){
