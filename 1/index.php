@@ -67,6 +67,10 @@ function responseMsg()
 			echo receiveLink($obj);
 		break;
 
+		case 'event':
+			echo receiveEvent($obj);
+		break;
+
 		default:
 		break;
 	}
@@ -104,6 +108,17 @@ function receiveLink($obj)
 	return replyText($obj,$linkArr['Url']);
 }
 
+function receiveEvent($obj)
+{
+	$event = $obj->Event;
+	switch($Event){
+		case 'subscribe':
+		$replyMsg = "欢迎来到我的平台,回复1:可以逛淘宝,回复2:可以上京东";
+		replyText($obj,$replyMsg);
+		break;
+	}
+}
+
 function replyImage($obj,$imageArr)
 {
 	$replyXml = "<xml>
@@ -129,5 +144,5 @@ function replyText($obj,$content)
 					<Content><![CDATA[%s]]></Content>
 				</xml>";
 	$resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$content);
-	return $resultstr;
+	echo $resultstr;
 }
