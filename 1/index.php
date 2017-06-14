@@ -136,8 +136,7 @@ function replyImage($obj,$imageArr)
 
 function replyText($obj,$content)
 {
-	$replyMsg = $obj->$content;
-	if($replyMsg==1)
+	if($content==1)
 		{
 			$dataArray = array(
 				array(
@@ -178,7 +177,7 @@ function replyText($obj,$content)
 						</xml>";
 			break;
 		}
-		elseif($replyMsg==2)
+		elseif($content==2)
 		{
 			$dataArray = array(
 				array(
@@ -227,6 +226,6 @@ function replyText($obj,$content)
 					<Content><![CDATA[%s]]></Content>
 				</xml>";
 		}
-	$resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$replyMsg);
+	$resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$content);
 	echo $resultstr;
 }
