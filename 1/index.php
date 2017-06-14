@@ -94,7 +94,8 @@ function receiveLocation($obj)
 		'Location_X'=>"您所在的位置的纬度".$obj->Location_X,
 		'Label'=>$obj->Label
 		);
-	return replyText($obj,$locationArr['Location_Y']);
+    $str = implode($locationArr);
+	return replyText($obj,$str);
 }
 
 function receiveLink($obj)
