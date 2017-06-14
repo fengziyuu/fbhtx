@@ -136,13 +136,97 @@ function replyImage($obj,$imageArr)
 
 function replyText($obj,$content)
 {
-	$replyXml="<xml>
+	$replyMsg = $obj->$content;
+	if($replyMsg==1)
+		{
+			$dataArray = array(
+				array(
+					'Title'=>'浏览淘宝1111',
+					'Description'=>'this is a test',
+					'PicUrl'=>'https://img10.360buyimg.com/da/jfs/t5749/237/1364970330/39708/347c201a/59256b8fNbb8043f6.gif.jpg',
+					'Url'=>'https://www.taobao.com',
+					),
+				array(
+					'Title'=>'浏览淘宝2222',
+					'Description'=>'this is a test',
+					'PicUrl'=>'https://img11.360buyimg.com/mobilecms/s110x110_jfs/t2581/20/346515013/295406/cc1ec305/570f39c1Nebd3b947.jpg',
+					'Url'=>'https://www.jd.com',
+					),
+				);
+
+			$strwx = "";
+			foreach($dataArray as $k=>$v)
+			{
+				$strwx .="<item>
+								<Title><![CDATA[".$v['Title']."]]></Title> 
+								<Description><![CDATA[".$v['Description']."]]></Description>
+								<PicUrl><![CDATA[".$v['PicUrl']."]]></PicUrl>
+								<Url><![CDATA[".$v['Url']."]]></Url>
+							</item>"; 
+			}
+
+
+			$replyXml = "<xml>
+							<ToUserName><![CDATA[%s]]></ToUserName>
+							<FromUserName><![CDATA[%s]]></FromUserName>
+							<CreateTime>%s</CreateTime>
+							<MsgType><![CDATA[news]]></MsgType>
+							<ArticleCount>".count($dataArray)."</ArticleCount>
+							<Articles>
+							".$strwx."
+							</Articles>
+						</xml>";
+			break;
+		}
+		elseif($replyMsg==2)
+		{
+			$dataArray = array(
+				array(
+					'Title'=>'浏览京东1111',
+					'Description'=>'this is a test',
+					'PicUrl'=>'https://img.alicdn.com/tfscom/i3/50983440/TB2ys6TrH8kpuFjy0FcXXaUhpXa_!!50983440.jpg_240x240.jpg',
+					'Url'=>'https://www.taobao.com',
+					),
+				array(
+					'Title'=>'浏览京东2222',
+					'Description'=>'this is a test',
+					'PicUrl'=>'https://img11.360buyimg.com/mobilecms/s110x110_jfs/t2581/20/346515013/295406/cc1ec305/570f39c1Nebd3b947.jpg',
+					'Url'=>'https://www.jd.com',
+					),
+				);
+
+			$strwx = "";
+			foreach($dataArray as $k=>$v)
+			{
+				$strwx .="<item>
+								<Title><![CDATA[".$v['Title']."]]></Title> 
+								<Description><![CDATA[".$v['Description']."]]></Description>
+								<PicUrl><![CDATA[".$v['PicUrl']."]]></PicUrl>
+								<Url><![CDATA[".$v['Url']."]]></Url>
+							</item>"; 
+			}
+
+
+			$replyXml = "<xml>
+							<ToUserName><![CDATA[%s]]></ToUserName>
+							<FromUserName><![CDATA[%s]]></FromUserName>
+							<CreateTime>%s</CreateTime>
+							<MsgType><![CDATA[news]]></MsgType>
+							<ArticleCount>".count($dataArray)."</ArticleCount>
+							<Articles>
+							".$strwx."
+							</Articles>
+						</xml>";
+			break;
+		}else{
+			$replyXml="<xml>
 					<ToUserName><![CDATA[%s]]></ToUserName>
 					<FromUserName><![CDATA[%s]]></FromUserName>
 					<CreateTime>%s</CreateTime>
 					<MsgType><![CDATA[text]]></MsgType>
 					<Content><![CDATA[%s]]></Content>
 				</xml>";
-	$resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$content);
+		}
+	$resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$replyMsg);
 	echo $resultstr;
 }
