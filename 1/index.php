@@ -90,7 +90,7 @@ function receiveImage($obj)
 function receiveLocation($obj)
 {
 	$locationArr = array(
-		'Location_Y'=>$obj->Location_Y,
+		'Location_Y'=>"您所在的位置的经度".$obj->Location_Y,
 		'Location_X'=>$obj->Location_X,
 		'Label'=>$obj->Label
 		);
