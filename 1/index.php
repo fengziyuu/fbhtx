@@ -121,7 +121,7 @@ function receiveEvent($obj)
 					<MsgType><![CDATA[text]]></MsgType>
 					<Content><![CDATA[%s]]></Content>
 				</xml>";
-        $resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$content);
+        $resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$replyMsg);
 		echo $resultstr;
 		break;
 	}
