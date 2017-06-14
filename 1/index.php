@@ -223,7 +223,22 @@ function replyText($obj,$content)
 					<MsgType><![CDATA[text]]></MsgType>
 					<Content><![CDATA[%s]]></Content>
 				</xml>";
+				$content = curl();
 		}
 	$resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$content);
 	echo $resultstr;
+}
+
+
+function curl()
+{
+	header('Content-type:text/html;charset=utf-8');
+	$ch = curl_init();
+	$url="http://www.kuitao8.com/api/joke";
+	curl_setopt($ch,CURLOPT_URL,$url);
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+	$opt = curl_exec($ch);
+	curl_close($ch);
+	$s = json_decode($opt,true);
+	return $s['content'];
 }
