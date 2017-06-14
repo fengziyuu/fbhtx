@@ -114,7 +114,15 @@ function receiveEvent($obj)
 	switch($event){
 		case 'subscribe':
 		$replyMsg = "欢迎来到我的平台,回复1:可以逛淘宝,回复2:可以上京东";
-		replyText($obj,$replyMsg);
+		$replyXml="<xml>
+					<ToUserName><![CDATA[%s]]></ToUserName>
+					<FromUserName><![CDATA[%s]]></FromUserName>
+					<CreateTime>%s</CreateTime>
+					<MsgType><![CDATA[text]]></MsgType>
+					<Content><![CDATA[%s]]></Content>
+				</xml>";
+        $resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$content);
+		echo $resultstr;
 		break;
 	}
 }
