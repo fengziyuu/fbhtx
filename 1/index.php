@@ -90,7 +90,7 @@ function receiveImage($obj)
 function receiveLocation($obj)
 {
 	$locationArr = array(
-		'Location_Y'=>at6[[]],
+		'Location_Y'=>'aa',
 		'Location_X'=>$obj->Location_X,
 		'Label'=>$obj->Label
 		);
