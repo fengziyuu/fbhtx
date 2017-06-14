@@ -113,7 +113,7 @@ function receiveEvent($obj)
 	$event = $obj->Event;
 	switch($event){
 		case 'subscribe':
-		$replyMsg = "欢迎来到我的平台,回复1:可以逛淘宝,回复2:可以上京东";
+		$replyMsg = "欢迎来到我的平台,回复1:可以逛淘宝,回复2:可以上京东;";
 		replyText($obj,$replyMsg);
 		break;
 	}
@@ -240,5 +240,5 @@ function curl()
 	$opt = curl_exec($ch);
 	curl_close($ch);
 	$s = json_decode($opt,true);
-	return htmlspecialchars($s['content']);
+	return $s['content'];
 }
