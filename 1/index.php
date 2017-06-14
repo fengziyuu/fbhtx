@@ -175,7 +175,6 @@ function replyText($obj,$content)
 							".$strwx."
 							</Articles>
 						</xml>";
-			break;
 		}
 		elseif($content==2)
 		{
@@ -216,7 +215,6 @@ function replyText($obj,$content)
 							".$strwx."
 							</Articles>
 						</xml>";
-			break;
 		}else{
 			$replyXml="<xml>
 					<ToUserName><![CDATA[%s]]></ToUserName>
