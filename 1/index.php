@@ -113,7 +113,7 @@ function receiveEvent($obj)
 	$event = $obj->Event;
 	switch($event){
 		case 'subscribe':
-		$replyMsg = "欢迎来到我的平台,回复1:可以逛淘宝,回复2:可以上京东";
+		global $replyMsg = "欢迎来到我的平台,回复1:可以逛淘宝,回复2:可以上京东";
 		replyText($obj,$replyMsg);
 		break;
 	}
