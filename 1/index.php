@@ -289,7 +289,10 @@ function replyText($obj,$content)
 							".$strwx."
 							</Articles>
 						</xml>";
-		}else{
+		}elseif($content=='笑话'){
+            
+            
+        }else{
 			$replyXml="<xml>
 					<ToUserName><![CDATA[%s]]></ToUserName>
 					<FromUserName><![CDATA[%s]]></FromUserName>
