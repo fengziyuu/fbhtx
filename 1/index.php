@@ -150,13 +150,13 @@
 		 	switch ($MsgType) {
 
 		 		case 'event':
-					$Event=$obj->Event;
+					$Event=$object->Event;
 					switch($Event){
 						//关注
 						case "subscribe":
 						$replyMsg="欢迎来到大林子平台,回复1:可以逛淘宝,回复2:可以上京东";
 						//封装xml数据包
-						echo $this->replyText($obj,$replyMsg);
+						echo $this->replyText($object,$replyMsg);
 						break;
 					}
 					break;
@@ -280,7 +280,7 @@
 		        //返回一个进行xml数据包
 
 			$resultStr = sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$content);
-		        return $resultStr;		
+		    return $resultStr;		
 		}
 
 		//发送图片消息
