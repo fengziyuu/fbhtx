@@ -290,7 +290,14 @@ function replyText($obj,$content)
 							</Articles>
 						</xml>";
 		}elseif($content=='笑话'){
-            
+            $replyXml="<xml>
+					<ToUserName><![CDATA[%s]]></ToUserName>
+					<FromUserName><![CDATA[%s]]></FromUserName>
+					<CreateTime>%s</CreateTime>
+					<MsgType><![CDATA[text]]></MsgType>
+					<Content><![CDATA[%s]]></Content>
+				</xml>";
+				$content = curls();
             
         }else{
 			$replyXml="<xml>
@@ -300,7 +307,6 @@ function replyText($obj,$content)
 					<MsgType><![CDATA[text]]></MsgType>
 					<Content><![CDATA[%s]]></Content>
 				</xml>";
-				$content = curls();
 		}
 	$resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$content);
 	echo $resultstr;
