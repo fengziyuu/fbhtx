@@ -97,7 +97,36 @@
 		 		        	echo $this->receiveImage($object);	
 		 			break;
 		 			
-		 		
+		 		case 'location':
+		 					//接收地理位置消息
+		 					$data=$this->receiveLocation($object);
+		 					$ch=curl_init();
+							$url="http://api.map.baidu.com/telematics/v3/weather?location=".$data['Location_Y'].",".$data['Location_X']."&output=json&ak=6b219a615eb77699a10eb54054959a2e";
+
+		 					//2.设置变量
+							curl_setopt($ch,CURLOPT_URL,$url);
+							//把数据以数据流的形式显示出
+							curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+							$output=curl_exec($ch);
+							curl_close($ch);
+							$s=json_decode($output,true);
+							// echo "<pre>";
+							$data=$s['results'][0]['weather_data'];
+							$dataarr=array();
+							//遍历
+							foreach($data as $key=>$value){
+								$dataarr[]=array(
+									'Title'=>$value['date'],
+									'Description'=>$value['weather'].$value['wind'].$value['temperature'],
+									'PicUrl'=>$value['dayPictureUrl'],
+									'Url'=>''
+									);
+							}
+
+							//回复图文消息
+							echo $this->replyNews($object,$dataarr);
+					break;
+
 		 		case  'link':
 		 				//接收链接消息
 		 				echo $this->receiveLink($object);
@@ -107,7 +136,17 @@
 		 	}
 		}
 
-		
+		//接收地理位置信息
+		private function receiveLocation($obj){
+			//把获取到的地理位置信息存储在数组
+			$locationArr=array(
+				"Location_X"=>$obj->Location_X,
+				"Location_Y"=>$obj->Location_Y,
+				"Label"=>$obj->Label
+				);
+
+			return $locationArr;
+		}
 		//接收文本消息
 		private function receiveText($obj){
 			//获取文本消息的内容
