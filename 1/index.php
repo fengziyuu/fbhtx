@@ -63,7 +63,7 @@
 	//4.关闭
 	curl_close($cn);
 	echo $output;
-	<?php
+
 //用sdk封装消息交互接口
 define('TOKEN','fengziyu');
 if(!isset($_GET['echostr']))
