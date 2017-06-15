@@ -1,136 +1,212 @@
-<?php
-//用sdk封装消息交互接口
-define('TOKEN','fengziyu');
+<?php 
+
+//微信公众平台基础接口PHP SDK(面向对象)
+
+define("TOKEN",'fengziyu');
+
+$wechat = new Wechat_base_api();
+
 if(!isset($_GET['echostr']))
-	responseMsg();
+	$wechat->responseMsg();//调用响应消息函数
 else
-	valid();
+	$wechat->valid();//实现网址接入.调用验证消息函数
 
-//验证消息
-function valid()
+class Wechat_base_api
 {
-	if(checksignature())
+	//验证消息
+	public function valid()
 	{
-		$echostr = $_GET['echostr'];
-		echo $echostr;
-		exit;
-	}	
-	else
-	{
-		echo 'error';
-		exit;
+		if($this->checkSignature())
+		{
+			$echostr = $_GET['echostr'];
+			echo $echostr;
+			exit;
+		}
+		else
+		{
+			echo 'error';
+			exit;
+		}
 	}
-}
 
-function checksignature()
-{
-	$signature = $_GET['signature'];
-	$timestamp = $_GET['timestamp'];
-	$nonce = $_GET['nonce'];
-	$stampArr = array($nonce,$timestamp,TOKEN);
-	sort($stampArr,SORT_STRING);
-	$stampStr = implode($stampArr);
-	$stampStr = sha1($stampStr);
-	if($stampStr == $signature)
-		return true;
-	else
-		return false;
-}
-
-function responseMsg()
-{
-	$postData = $GLOBALS[HTTP_RAW_POST_DATA];
-	if(!$postData)
+	//检查签名
+	public function checkSignature()
 	{
-		echo 'error';
-		exit;
+		//获取微信服务器GET请求的4个参数
+		$signature = $_GET['signature'];
+		$timestamp = $_GET['timestamp'];
+		$nonce = $_GET['nonce'];
+
+		//定义一个数组 存储其中三个参数  分别是timestamp nonce token
+		$tempArr = array($nonce,$timestamp,TOKEN);
+
+		//进行排序
+		sort($tempArr,SORT_STRING);
+
+		//将数组转换成字符串
+		$tmpStr = implode($tempArr);
+
+		//进行sha1加密算法
+		$tmpStr = sha1($tmpStr);
+
+		//判断请求是否来自微信服务器,对比$tmpStr 和 $signature
+		if($tmpStr == $signature)
+			return true;
+		else
+			return false;
 	}
-	$obj = simplexml_load_string($postData,'SimpleXMLElement',LIBXML_NOCDATA);
-	$FromUserName = $obj->FromUserName;
-	$ToUserName = $obj->ToUserName;
-	$MsgType = $obj->MsgType;
-	switch($MsgType)
+
+	//响应消息
+	public function responseMsg()
 	{
-		case 'text':
-			echo receiveText($obj);
-		break;
+		//根据用户传过来的消息类型进行不同的响应
 
-		case 'image':
-			echo receiveImage($obj);
-		break;
+		//1.接受微信服务器POST过来的数据 XML数据包
+		$postData = $GLOBALS[HTTP_RAW_POST_DATA];
+		if(!$postData)
+		{
+			echo 'error';
+			exit;
+		}
 
-		case 'location':
-			echo receiveLocation($obj);
-		break;
+		//2.解析XML数据包
+		$obj = simplexml_load_string($postData,'SimpleXMLElement',LIBXML_NOCDATA);
 
-		case 'link':
-			echo receiveLink($obj);
-		break;
+		//3.获取消息类型
+		$MsgType = $obj->MsgType;
+		switch($Msgtype)
+		{
+			case 'text':
+	 				//接收文本消息
+	 				echo $this->receiveText($obj);
+	 			break;
 
-		case 'event':
-			echo receiveEvent($obj);
-		break;
+	 		case 'image':
+ 		        	//接收图片消息
+ 		        	echo $this->receiveImage($obj);	
+	 			break;
 
-		default:
-		break;
+	 		case 'voice':
+ 		        	//接收语音消息
+ 		        	echo $this->receiveVoice($obj);	
+	 			break;
+	 			
+	 		
+	 		case  'link':
+	 				//接收链接消息
+	 				echo $this->receiveLink($obj);
+	 				break;
+
+	 		case 'location':
+ 					//接收地理位置消息
+ 					$data=$this->receiveLocation($obj);
+ 					$ch=curl_init();
+					$url="http://api.map.baidu.com/telematics/v3/weather?location=".$data['Location_Y'].",".$data['Location_X']."&output=json&ak=6b219a615eb77699a10eb54054959a2e";
+ 					//2.设置变量
+					curl_setopt($ch,CURLOPT_URL,$url);
+					//把数据以数据流的形式显示出
+					curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+					$output=curl_exec($ch);
+					curl_close($ch);
+					$s=json_decode($output,true);
+					$data=$s['results'][0]['weather_data'];
+					$dataarr=array();
+					//遍历
+					foreach($data as $key=>$value){
+						$dataarr[]=array(
+							'Title'=>$value['date'],
+							'Description'=>$value['weather'].$value['wind'].$value['temperature'],
+							'PicUrl'=>$value['dayPictureUrl'],
+							'Url'=>''
+							);
+					}
+
+					//回复图文消息
+					echo $this->replyNews($object,$dataarr);		
+	 				break; 
+
+	 		default:
+	 			break;
+		}
+
 	}
-}
 
-function receiveText($obj)
-{
-	$content = $obj->Content;
-	return replyText($obj,$content);
-}
+	//接收地理位置信息
+	private function receiveLocation($obj){
+		//把获取到的地理位置信息存储在数组
+		$locationArr=array(
+			"Location_X"=>$obj->Location_X,
+			"Location_Y"=>$obj->Location_Y,
+			"Label"=>$obj->Label
+			);
 
-function receiveImage($obj)
-{
-	$imageArr = array(
-		'PicUrl'=>$obj->PicUrl,
-		'MediaId'=>$obj->MediaId
-		);
-	return replyImage($obj,$imageArr);
-}
+		return $locationArr;
+	}
 
-function receiveLocation($obj)
-{
-	$locationArr = array(
-		'Location_Y'=>"您所在的位置的经度".$obj->Location_Y,
-		'Location_X'=>"纬度".$obj->Location_X,
-		'Label'=>$obj->Label
-		);
-    $str = implode($locationArr);
-	return replyText($obj,$str);
-}
+	//接受文本消息
+	private function receiveText($obj)
+	{
+		//获取文本消息的内容
+		$content = $obj->Content;
+		//发送文本消息
+		return $this->replyText($obj,$content);
+	}
 
-function receiveLink($obj)
-{
-	$linkArr = array('Url'=>$obj->Url);
-	return replyText($obj,$linkArr['Url']);
-}
+	//接受图片消息
+	private function receiveImage($obj)
+	{
+		//获取图片消息的内容
+		$imageArr = array(
+				'PicUrl'=>$obj->PicUrl,
+				'MediaId'=>$obj->MediaId,
+			);
+		//发送图片消息
+		return $this->replyImage($obj,$imageArr);
+	}
 
-function receiveEvent($obj)
-{
-	$event = $obj->Event;
-	switch($event){
-		case 'subscribe':
-		$replyMsg = "欢迎来到我的平台,回复1:可以逛淘宝,回复2:可以上京东;回复其他可以看笑话";
-		//replyText($obj,$replyMsg);
-      	$replyXml="<xml>
+	//接受语音消息
+	private function receiveVoive($obj)
+	{
+		//获取语音消息内容
+		$voiceArr = array(
+				'MediaId'=>$obj->MediaId,
+				'Format'=>$obj->Format,
+			);
+		//发送语音消息
+		return $this->replyVoice($obj,$voiceArr);
+	}
+
+	//接收链接消息
+	private function receiveLink($obj)
+	{
+		//接收链接消息的内容
+		$linkArr = array(
+				"Title"=>$obj->Title,
+				"Description"=>$obj->Description,
+				"Url"=>$obj->Url
+			);
+		//回复文本消息
+		return $this->replyText($obj,"你发过来的链接地址是{$linkArr['Url']}");
+	}
+
+	//发送文本消息
+	private function replyText($obj,$content){
+		$replyXml = "<xml>
 					<ToUserName><![CDATA[%s]]></ToUserName>
 					<FromUserName><![CDATA[%s]]></FromUserName>
 					<CreateTime>%s</CreateTime>
 					<MsgType><![CDATA[text]]></MsgType>
 					<Content><![CDATA[%s]]></Content>
-				</xml>";
-        $resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$replyMsg);
-		echo $resultstr;
-		break;
-	}
-}
+					</xml>";
+	        //返回一个进行xml数据包
 
-function replyImage($obj,$imageArr)
-{
-	$replyXml = "<xml>
+		$resultStr = sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$content);
+	        return $resultStr;		
+	}
+
+	//发送图片消息
+	private function replyImage($obj,$imageArr){
+		$replyXml = "<xml>
 					<ToUserName><![CDATA[%s]]></ToUserName>
 					<FromUserName><![CDATA[%s]]></FromUserName>
 					<CreateTime>%s</CreateTime>
@@ -138,127 +214,65 @@ function replyImage($obj,$imageArr)
 					<Image>
 					<MediaId><![CDATA[%s]]></MediaId>
 					</Image>
-				</xml>";
-	$resultstr = sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$imageArr['MediaId']);
-	echo $resultstr;
-}
+					</xml>";
+	        //返回一个进行xml数据包
 
-function replyText($obj,$content)
-{
-	if($content==1)
-		{
-			$dataArray = array(
-				array(
-					'Title'=>'浏览淘宝1111',
-					'Description'=>'this is a test',
-					'PicUrl'=>'https://img10.360buyimg.com/da/jfs/t5749/237/1364970330/39708/347c201a/59256b8fNbb8043f6.gif.jpg',
-					'Url'=>'https://www.taobao.com',
-					),
-				array(
-					'Title'=>'浏览淘宝2222',
-					'Description'=>'this is a test',
-					'PicUrl'=>'https://img11.360buyimg.com/mobilecms/s110x110_jfs/t2581/20/346515013/295406/cc1ec305/570f39c1Nebd3b947.jpg',
-					'Url'=>'https://www.jd.com',
-					),
-				);
+		$resultStr = sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$imageArr['MediaId']);
+	        return $resultStr;			
+	}
 
-			$strwx = "";
-			foreach($dataArray as $k=>$v)
-			{
-				$strwx .="<item>
-								<Title><![CDATA[".$v['Title']."]]></Title> 
-								<Description><![CDATA[".$v['Description']."]]></Description>
-								<PicUrl><![CDATA[".$v['PicUrl']."]]></PicUrl>
-								<Url><![CDATA[".$v['Url']."]]></Url>
-							</item>"; 
-			}
-
-
-			$replyXml = "<xml>
-							<ToUserName><![CDATA[%s]]></ToUserName>
-							<FromUserName><![CDATA[%s]]></FromUserName>
-							<CreateTime>%s</CreateTime>
-							<MsgType><![CDATA[news]]></MsgType>
-							<ArticleCount>".count($dataArray)."</ArticleCount>
-							<Articles>
-							".$strwx."
-							</Articles>
-						</xml>";
-		}
-		elseif($content==2)
-		{
-			$dataArray = array(
-				array(
-					'Title'=>'浏览京东1111',
-					'Description'=>'this is a test',
-					'PicUrl'=>'https://img.alicdn.com/tfscom/i3/50983440/TB2ys6TrH8kpuFjy0FcXXaUhpXa_!!50983440.jpg_240x240.jpg',
-					'Url'=>'https://www.taobao.com',
-					),
-				array(
-					'Title'=>'浏览京东2222',
-					'Description'=>'this is a test',
-					'PicUrl'=>'https://img11.360buyimg.com/mobilecms/s110x110_jfs/t2581/20/346515013/295406/cc1ec305/570f39c1Nebd3b947.jpg',
-					'Url'=>'https://www.jd.com',
-					),
-				);
-
-			$strwx = "";
-			foreach($dataArray as $k=>$v)
-			{
-				$strwx .="<item>
-								<Title><![CDATA[".$v['Title']."]]></Title> 
-								<Description><![CDATA[".$v['Description']."]]></Description>
-								<PicUrl><![CDATA[".$v['PicUrl']."]]></PicUrl>
-								<Url><![CDATA[".$v['Url']."]]></Url>
-							</item>"; 
-			}
-
-
-			$replyXml = "<xml>
-							<ToUserName><![CDATA[%s]]></ToUserName>
-							<FromUserName><![CDATA[%s]]></FromUserName>
-							<CreateTime>%s</CreateTime>
-							<MsgType><![CDATA[news]]></MsgType>
-							<ArticleCount>".count($dataArray)."</ArticleCount>
-							<Articles>
-							".$strwx."
-							</Articles>
-						</xml>";
-		}else{
-			$replyXml="<xml>
+	//回复语音消息
+	private function replyVoice($obj,$voiceArr)
+	{
+		$replyXml = "<xml>
 					<ToUserName><![CDATA[%s]]></ToUserName>
 					<FromUserName><![CDATA[%s]]></FromUserName>
 					<CreateTime>%s</CreateTime>
-					<MsgType><![CDATA[text]]></MsgType>
-					<Content><![CDATA[%s]]></Content>
-				</xml>";
-				$content = curls();
+					<MsgType><![CDATA[voice]]></MsgType>
+					<Voice>
+					<MediaId><![CDATA[%s]]></MediaId>
+					</Voice>
+					</xml>";
+	        //返回一个进行xml数据包
+
+		$resultStr = sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$voiceArr['MediaId']);
+	        return $resultStr;		
+	}
+
+	//回复图文消息
+	private function replyNews($obj,$newsArr){
+		$itemStr = "";
+		if(is_array($newsArr))
+		{
+			foreach($newsArr as $item)
+			{
+				$itemXml ="<item>
+					<Title><![CDATA[%s]]></Title> 
+					<Description><![CDATA[%s]]></Description>
+					<PicUrl><![CDATA[%s]]></PicUrl>
+					<Url><![CDATA[%s]]></Url>
+					</item>";
+				$itemStr .= sprintf($itemXml,$item['Title'],$item['Description'],$item['PicUrl'],$item['Url']);
+			}
+
 		}
-	$resultstr=sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),$content);
-	echo $resultstr;
+
+		$replyXml = "<xml>
+					<ToUserName><![CDATA[%s]]></ToUserName>
+					<FromUserName><![CDATA[%s]]></FromUserName>
+					<CreateTime>%s</CreateTime>
+					<MsgType><![CDATA[news]]></MsgType>
+					<ArticleCount>%s</ArticleCount>
+					<Articles>
+						{$itemStr}
+					</Articles>
+					</xml> ";
+	        //返回一个进行xml数据包
+
+		$resultStr = sprintf($replyXml,$obj->FromUserName,$obj->ToUserName,time(),count($newsArr));
+	        return $resultStr;			
+	}	
+
+		
 }
-
-
-function curls()
-{
-	header("Content-type:text/html;charset=utf-8");
-    //curl 模拟get请求1 截取部分数据 以数据流的形式显示出 而不是整个页面
-    //1.初始化
-    $ch=curl_init();
-    //笑话接口
-    $url="http://www.kuitao8.com/api/joke";
-    //2.设置变量
-    curl_setopt($ch,CURLOPT_URL,$url);
-    //把数据以数据流的形式显示出
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-    //3.执行
-    $output=curl_exec($ch);
-    //4.关闭curl
-    curl_close($ch);
-
-    // echo $output;
-    //json_decode()
-    $s=json_decode($output,true);
-    // var_dump($s);
-    return htmlspecialchars(str_replace("<br />","",$s['content']));
-}
+ ?>
