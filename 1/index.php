@@ -148,6 +148,18 @@
 		 	//获取消息类型
 		 	$MsgType = $object->MsgType;
 		 	switch ($MsgType) {
+
+		 		case 'event':
+					$Event=$obj->Event;
+					switch($Event){
+						//关注
+						case "subscribe":
+						$replyMsg="欢迎来到大林子平台,回复1:可以逛淘宝,回复2:可以上京东";
+						//封装xml数据包
+						echo $this->replyText($obj,$replyMsg);
+						break;
+					}
+					break;
 		 		
 		 		case 'text':
 		 				//接收文本消息
