@@ -178,7 +178,7 @@ function receiveEvent($obj)
 	$event = $obj->Event;
 	switch($event){
 		case 'subscribe':
-		$replyMsg = "欢迎来到我的平台,回复1:可以逛淘宝,回复2:可以上京东;回复其他可以看笑话！";
+		$replyMsg = "欢迎来到我的平台,回复1:可以逛淘宝,回复2:可以上京东;回复‘笑话’可以看笑话！";
 		//replyText($obj,$replyMsg);
       	$replyXml="<xml>
 					<ToUserName><![CDATA[%s]]></ToUserName>
